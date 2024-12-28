@@ -6,7 +6,7 @@ import { Expense } from '../interfaces/Expense';
 
 interface ExpenseModalProps {
     expense: Expense | null;
-    onClose: () => void;
+    onClose: (status: string) => void;
 }
 
 const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
@@ -42,7 +42,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
         await axiosInstance.post('expense/add', formData);
         toast.success('Expense added successfully!');
       }
-      onClose();
+      onClose('success');
     } catch (error) {
       toast.error('Failed to save expense. Please try again.');
     }
@@ -97,7 +97,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
               <option value="Entertainment">Entertainment</option>
               <option value="Shopping">Shopping</option>
               <option value="Bills">Bills</option>
-              <option value="Other">Other</option>
+              <option value="Others">Others</option>
             </select>
           </div>
 
@@ -136,7 +136,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => onClose('cancel')}
               className="ml-4 px-6 py-2 bg-gray-500 text-white font-medium rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               Cancel
