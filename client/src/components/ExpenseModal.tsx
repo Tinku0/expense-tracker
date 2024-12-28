@@ -20,7 +20,10 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
 
   useEffect(() => {
     if (expense) {
-      setFormData(expense);
+      setFormData({
+        ...expense,
+        date: new Date(expense.date).toISOString().split('T')[0], // Format the date to YYYY-MM-DD
+      });
     }
   }, [expense]);
 
