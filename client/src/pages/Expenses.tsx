@@ -3,6 +3,8 @@ import axiosInstance from '../axiosInstance';
 import { toast } from 'react-toastify';
 import ExpenseModal from '../components/ExpenseModal';
 import { Expense } from '../interfaces/Expense';
+import { FiEdit2 } from "react-icons/fi";
+import { MdOutlineDelete } from "react-icons/md";
 
 const Expenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -60,30 +62,39 @@ const Expenses = () => {
               <th className="w-1/4 py-2 px-4 text-left">Category</th>
               <th className="w-1/4 py-2 px-4 text-left">Description</th>
               <th className="w-1/4 py-2 px-4 text-left">Date</th>
-              <th className="w-1/4 py-2 px-4 text-left">Actions</th>
+              <th className="w-1/4 py-2 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {expenses && expenses.map((expense: Expense) => (
               <tr key={expense._id} className="border-b hover:bg-gray-100">
+                <td className="py-2 px-4">{expense.name}</td>
                 <td className="py-2 px-4">{expense.amount}</td>
                 <td className="py-2 px-4">{expense.category}</td>
                 <td className="py-2 px-4">{expense.description}</td>
                 <td className="py-2 px-4">{new Date(expense.date).toLocaleDateString()}</td>
-                <td className="py-2 px-4">
+                <td className="flex items-center py-2 px-4 space-x-4">
                   <button
                     onClick={() => handleEdit(expense)}
-                    className="mr-2 px-4 py-2 bg-yellow-500 text-white rounded-md"
+                    className="relative flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-500 rounded-full transition-all duration-200 hover:bg-blue-600 hover:text-white focus:outline-none"
                   >
-                    Edit
+                    <FiEdit2 className="text-lg transition-all duration-200" />
+                    <span className="absolute left-1/2 transform -translate-x-1/2 bottom-12 text-sm text-white bg-black px-2 py-1 rounded-md opacity-0 transition-all duration-200 hover:opacity-100">
+                      Edit
+                    </span>
                   </button>
+
                   <button
                     onClick={() => handleDelete(expense._id)}
-                    className="px-4 py-2 bg-red-500 text-white rounded-md"
+                    className="relative flex items-center justify-center w-10 h-10 bg-red-100 text-red-500 rounded-full transition-all duration-200 hover:bg-red-600 hover:text-white focus:outline-none"
                   >
-                    Delete
+                    <MdOutlineDelete className="text-lg transition-all duration-200" />
+                    <span className="absolute left-1/2 transform -translate-x-1/2 bottom-12 text-sm text-white bg-black px-2 py-1 rounded-md opacity-0 transition-all duration-200 hover:opacity-100">
+                      Delete
+                    </span>
                   </button>
                 </td>
+
               </tr>
             ))}
           </tbody>
