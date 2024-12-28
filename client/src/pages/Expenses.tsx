@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosInstance';
 import { toast } from 'react-toastify';
 import ExpenseModal from '../components/ExpenseModal';
 import { Expense } from '../interfaces/Expense';
-import { FiEdit2 } from "react-icons/fi";
-import { MdOutlineDelete } from "react-icons/md";
+import { MdOutlineDelete } from 'react-icons/md';
+import { FiEdit2 } from 'react-icons/fi';
 
 const Expenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -29,7 +29,7 @@ const Expenses = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id: string | undefined) => {
+  const handleDelete = async (id: string) => {
     try {
       await axiosInstance.delete(`expense/delete/${id}`);
       toast.success('Expense deleted successfully!');
@@ -54,10 +54,11 @@ const Expenses = () => {
       >
         Add Expense
       </button>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+      <div className="bg-white shadow-md rounded-lg overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-800 text-white">
             <tr>
+              <th className="w-1/4 py-2 px-4 text-left">Name</th>
               <th className="w-1/4 py-2 px-4 text-left">Amount</th>
               <th className="w-1/4 py-2 px-4 text-left">Category</th>
               <th className="w-1/4 py-2 px-4 text-left">Description</th>
@@ -73,28 +74,20 @@ const Expenses = () => {
                 <td className="py-2 px-4">{expense.category}</td>
                 <td className="py-2 px-4">{expense.description}</td>
                 <td className="py-2 px-4">{new Date(expense.date).toLocaleDateString()}</td>
-                <td className="flex items-center py-2 px-4 space-x-4">
+                <td className="flex items-center justify-center py-2 px-4 space-x-4">
                   <button
                     onClick={() => handleEdit(expense)}
                     className="relative flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-500 rounded-full transition-all duration-200 hover:bg-blue-600 hover:text-white focus:outline-none"
                   >
-                    <FiEdit2 className="text-lg transition-all duration-200" />
-                    <span className="absolute left-1/2 transform -translate-x-1/2 bottom-12 text-sm text-white bg-black px-2 py-1 rounded-md opacity-0 transition-all duration-200 hover:opacity-100">
-                      Edit
-                    </span>
+                    <FiEdit2  className="text-lg transition-all duration-200"/>
                   </button>
-
                   <button
-                    onClick={() => handleDelete(expense._id)}
+                    onClick={() => handleDelete(expense._id!)}
                     className="relative flex items-center justify-center w-10 h-10 bg-red-100 text-red-500 rounded-full transition-all duration-200 hover:bg-red-600 hover:text-white focus:outline-none"
                   >
-                    <MdOutlineDelete className="text-lg transition-all duration-200" />
-                    <span className="absolute left-1/2 transform -translate-x-1/2 bottom-12 text-sm text-white bg-black px-2 py-1 rounded-md opacity-0 transition-all duration-200 hover:opacity-100">
-                      Delete
-                    </span>
+                    <MdOutlineDelete  className="text-lg transition-all duration-200"/>
                   </button>
                 </td>
-
               </tr>
             ))}
           </tbody>
