@@ -31,6 +31,45 @@ const addExpense = async (req, res, next) => {
     }
 };
 
+const editExpense = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { name, amount, category, description, date } = req.body;
+        const userId = req.user.id;
+
+        const updatedExpense = await ExpenseModel.findOneAndUpdate(
+            { _id: id, userId },
+            { name, amount, category, description, date },
+            { new: true }
+        );
+
+        if (!updatedExpense) {
+            return res.status(404).json({ message: 'Expense not found' });
+        }
+
+        res.status(200).json({ message: 'Expense updated successfully', expense: updatedExpense });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteExpense = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+
+        const deletedExpense = await ExpenseModel.findOneAndDelete({ _id: id, userId });
+
+        if (!deletedExpense) {
+            return res.status(404).json({ message: 'Expense not found' });
+        }
+
+        res.status(200).json({ message: 'Expense deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const getExpenses = async (req, res, next) => {
     try {
         // Access `userId` from `req.user` (added by `verifyToken` middleware)
@@ -46,4 +85,4 @@ const getExpenses = async (req, res, next) => {
     }
 };
 
-module.exports = { addExpense, getExpenses }
+module.exports = { addExpense, editExpense, deleteExpense, getExpenses }
