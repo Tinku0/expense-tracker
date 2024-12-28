@@ -49,14 +49,16 @@ const Expenses = () => {
 
   return (
     <div className="container mx-auto md:p-4">
-      <h1 className="text-2xl font-bold mb-4">Expenses</h1>
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md"
-      >
-        Add Expense
-      </button>
-      <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+      <div className='flex justify-between items-center mb-4'>
+        <h1 className="text-2xl font-bold">Expenses</h1>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Add Expense
+        </button>
+      </div>
+      <div className="bg-gray-50 shadow-sm rounded-lg overflow-x-auto">
         <table className="min-w-full bg-white hidden md:table">
           <thead className="bg-gray-800 text-white">
             <tr>
@@ -76,7 +78,7 @@ const Expenses = () => {
                 <td className="py-2 px-4">{expense.category}</td>
                 <td className="py-2 px-4">{expense.description}</td>
                 <td className="py-2 px-4">{new Date(expense.date).toLocaleDateString()}</td>
-                <td className="flex items-center justify-center py-2 px-4 space-x-4">
+                <td className="flex items-center justify-center py-2 px-4 space-x-2">
                   <button
                     onClick={() => handleEdit(expense)}
                     className="relative flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-500 rounded-full transition-all duration-200 hover:bg-blue-600 hover:text-white focus:outline-none"
