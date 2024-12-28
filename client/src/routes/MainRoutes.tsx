@@ -2,7 +2,6 @@
 import { Route, Routes, Outlet, Navigate } from 'react-router-dom';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
-import Home from '../pages/Home';
 import Expenses from '../pages/Expenses';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '../layouts/MainLayout';
@@ -21,7 +20,6 @@ const MainRoutes = () => {
             </ProtectedRoute>
           }
         >
-          <Route path="/home" element={<Home />} />
           <Route path="/expenses" element={<Expenses />} />
         </Route>
       </Route>
