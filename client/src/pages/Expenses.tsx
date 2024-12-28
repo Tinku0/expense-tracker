@@ -71,12 +71,12 @@ const Expenses = () => {
         <table className="min-w-full bg-white hidden md:table">
           <thead className="bg-gray-800 text-white">
             <tr>
-              <th className="w-1/4 py-2 px-4 text-left">Name</th>
-              <th className="w-1/4 py-2 px-4 text-left">Amount</th>
-              <th className="w-1/4 py-2 px-4 text-left">Category</th>
-              <th className="w-1/4 py-2 px-4 text-left">Description</th>
-              <th className="w-1/4 py-2 px-4 text-left">Date</th>
-              <th className="w-1/4 py-2 px-4 text-center">Actions</th>
+              <th className="w-1/6 py-2 px-4 text-left">Name</th>
+              <th className="w-1/6 py-2 px-4 text-left">Amount</th>
+              <th className="w-1/6 py-2 px-4 text-left">Category</th>
+              <th className="w-2/6 py-2 px-4 text-left">Description</th>
+              <th className="w-1/6 py-2 px-4 text-left">Date</th>
+              <th className="w-1/6 py-2 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -85,12 +85,18 @@ const Expenses = () => {
                 <td className="py-2 px-4">{expense.name}</td>
                 <td className="py-2 px-4">{expense.amount}</td>
                 <td className="py-2 px-4">
-                  <span className={`px-2 py-1 rounded-full text-sm ${categoryColors[expense.category] || 'bg-gray-200 text-gray-800'}`}>
+                  <span className={`px-2 font-semibold py-1 rounded-full text-sm ${categoryColors[expense.category] || 'bg-gray-200 text-gray-800'}`}>
                     {expense.category}
                   </span>
                 </td>
                 <td className="py-2 px-4">{expense.description}</td>
-                <td className="py-2 px-4">{new Date(expense.date).toLocaleDateString()}</td>
+                <td className="py-2 px-4">
+                  {new Date(expense.date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </td>
                 <td className="flex items-center justify-center py-2 px-4 space-x-2">
                   <button
                     onClick={() => handleEdit(expense)}
