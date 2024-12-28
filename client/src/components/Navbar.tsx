@@ -28,10 +28,10 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
             <Link
-              to="/home"
+              to="/expenses"
               className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-lg font-medium"
             >
-              Home
+              Expenses
             </Link>
             <Link
               to="/profile"
