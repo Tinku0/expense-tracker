@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface User {
   name: string | null;
@@ -13,7 +13,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-
+  const location = useLocation();
   return (
     <nav className="bg-blue-600 shadow-md">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,27 +21,27 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           {/* Logo Section */}
           <div className="flex items-center">
             <Link to="/" className="text-white text-2xl font-bold">
-              ExpenseTracker
+              Expense Tracker
             </Link>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
+            <p className="text-white">Welcome, {user?.name}</p>
             <Link
               to="/expenses"
-              className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-lg font-medium"
+              className={location.pathname === '/expenses' ? 'p-2 rounded text-gray-800 bg-white' : 'text-white hover:text-gray-700 hover:bg-white px-3 py-2 rounded-md text-md font-medium'}
             >
               Expenses
             </Link>
             <Link
               to="/profile"
-              className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-lg font-medium"
+              className={location.pathname === '/profile' ? 'p-2 rounded text-gray-800 bg-white' : 'text-white hover:text-gray-700 hover:bg-white px-3 py-2 rounded-md text-md font-medium'}
             >
               Profile
             </Link>
             {true && (
               <>
-                <span className="text-white">{user?.name}</span>
                 <button
                   onClick={onLogout}
                   className="text-white bg-blue-500 px-4 py-2 rounded-md hover:bg-white hover:text-blue-600 transition duration-200"
