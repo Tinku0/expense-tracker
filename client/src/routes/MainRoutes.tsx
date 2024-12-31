@@ -5,6 +5,7 @@ import Login from '../pages/Login';
 import Expenses from '../pages/Expenses';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '../layouts/MainLayout';
+import Profile from '../pages/Profile';
 
 const MainRoutes = () => {
   return (
@@ -21,6 +22,7 @@ const MainRoutes = () => {
           }
         >
           <Route path="/expenses" element={<Expenses />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
     </Routes>
