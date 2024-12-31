@@ -42,7 +42,7 @@ const Register = () => {
           {/* Full Name */}
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
-              Full Name
+              Name
             </label>
             <input
               type="text"
@@ -51,7 +51,6 @@ const Register = () => {
               className={`w-full px-4 py-2 border rounded-md focus:ring-2 ${
                 errors.name ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-400'
               }`}
-              placeholder="John Doe"
             />
             {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
           </div>
@@ -68,7 +67,6 @@ const Register = () => {
               className={`w-full px-4 py-2 border rounded-md focus:ring-2 ${
                 errors.email ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-400'
               }`}
-              placeholder="example@example.com"
             />
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
           </div>
@@ -85,7 +83,6 @@ const Register = () => {
               className={`w-full px-4 py-2 border rounded-md focus:ring-2 ${
                 errors.password ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-400'
               }`}
-              placeholder="••••••••"
             />
             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
           </div>
@@ -102,7 +99,6 @@ const Register = () => {
               className={`w-full px-4 py-2 border rounded-md focus:ring-2 ${
                 errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-400'
               }`}
-              placeholder="••••••••"
             />
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
