@@ -57,7 +57,7 @@ const Expenses = () => {
   };
 
   return (
-    <div className="container mx-auto md:p-4">
+    <>
       <div className='flex justify-between items-center mb-4'>
         <h1 className="text-2xl font-bold">Expenses</h1>
         <button
@@ -157,7 +157,7 @@ const Expenses = () => {
           onClose={handleModalClose}
         />
       )}
-    </div>
+    </>
   );
 };
 
