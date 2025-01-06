@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axiosInstance from '../axiosInstance';
+import { toast } from 'react-toastify';
 
 const Register = () => {
 
@@ -18,6 +19,7 @@ const Register = () => {
       .oneOf([yup.ref('password')], 'Passwords must match')
       .required('Confirm password is required'),
   });
+  const navigate = useNavigate();
 
   const {
     register,
@@ -28,8 +30,16 @@ const Register = () => {
   });
 
   const onSubmit = async (data: any) => {
-    console.log('Form Data:', data);
-    await axios.post(import.meta.env.VITE_API_BASE_URL+'auth/register',data).then((res: any) => { console.log(res) })
+    try {
+      const response = await axiosInstance.post('auth/register', data);
+      if(response){
+        toast.success('Account created successfully!');
+        navigate('/login')
+      }
+    } catch (error) {
+      toast.error('Failed to create account. Please try again.');
+    }
+
   };
 
   return (

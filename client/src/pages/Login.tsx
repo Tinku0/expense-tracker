@@ -20,7 +20,6 @@ const Login = () => {
   const navigate = useNavigate();
   const onSubmit = async (data: any) => {
     // Handle login logic (e.g., API call)
-    console.log("Logging in with:", data);
     await axiosInstance.post(import.meta.env.VITE_API_BASE_URL+'auth/login', data).then((res: any) => { 
       if(res){
         toast.success('Login successful!');
