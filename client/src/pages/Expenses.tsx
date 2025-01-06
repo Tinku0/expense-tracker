@@ -29,7 +29,7 @@ const Expenses = () => {
       const response = await axiosInstance.get('expense/get');
       setExpenses(response.data.expenses);
     } catch (error) {
-      console.error('Error fetching expenses:', error);
+      toast.error('Failed to fetch expenses. Please try again.');
     }
   };
 
@@ -68,7 +68,8 @@ const Expenses = () => {
         </button>
       </div>
       <div className="bg-gray-50 shadow-sm rounded-lg overflow-x-auto">
-        <table className="min-w-full bg-white hidden md:table">
+        {expenses.length != 0 ? <>
+          <table className="min-w-full bg-white hidden md:table">
           <thead className="bg-gray-800 text-white">
             <tr>
               <th className="w-1/6 py-2 px-4 text-left">Name</th>
@@ -150,6 +151,7 @@ const Expenses = () => {
             </div>
           ))}
         </div>
+        </> : <div className='p-3'>No Expenses</div> }
       </div>
       {isModalOpen && (
         <ExpenseModal
