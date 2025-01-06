@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const { connectToDB } = require('./db/connectToDatabase');
+const { connectToDB } = require('./config/connectToDatabase');
 const userRoutes = require('./routes/user');
 const expenseRoutes = require('./routes/expense');
+const profileRoutes = require('./routes/userprofile');
 const verifyToken = require('./middleware/verifyToken');
 require('dotenv').config();
 
@@ -19,3 +20,4 @@ app.listen(PORT, () => {
 app.use(express.json())
 app.use('/auth', userRoutes)
 app.use('/expense', verifyToken, expenseRoutes)
+app.use('/profile', verifyToken, profileRoutes)
