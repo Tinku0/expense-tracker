@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user');
+const UserProfile = require('../models/userprofile');
 require('dotenv').config();
 // Register a new user
 const registerUser = async (req, res, next) => {
@@ -26,6 +27,16 @@ const registerUser = async (req, res, next) => {
 
         // Save the user to the database
         const savedUser = await newUser.save();
+
+        // Create a user profile
+        const newUserProfile = new UserProfile({
+            userId: savedUser._id,
+            name: savedUser.name,
+            email: savedUser.email,
+        });
+
+        // Save the user profile to the database
+        await newUserProfile.save();
 
         res.status(201).json({ message: 'Registration successful', user: savedUser });
     } catch (error) {
