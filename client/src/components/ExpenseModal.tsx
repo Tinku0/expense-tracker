@@ -1,12 +1,18 @@
-// filepath: /e:/MERN/expense-tracker/client/src/pages/ExpenseModal.tsx
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axiosInstance';
 import { toast } from 'react-toastify';
 import { Expense } from '../interfaces/Expense';
+import CreatableSelect from 'react-select/creatable';
 
 interface ExpenseModalProps {
     expense: Expense | null;
     onClose: (status: string) => void;
+}
+
+interface Category {
+  name: string,
+  type: string,
+  userId: null | string
 }
 
 const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
@@ -17,8 +23,10 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
     description: '',
     date: '',
   });
+  const [categories, setCategories] = useState<{ value: string, label: string }[]>([]);
 
   useEffect(() => {
+    getCategories();
     if (expense) {
       setFormData({
         ...expense,
@@ -26,6 +34,16 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
       });
     }
   }, [expense]);
+
+  const getCategories = async () => {
+    try {
+      const response = await axiosInstance.get(import.meta.env.VITE_API_BASE_URL+'category/get');
+        console.log(response)
+      setCategories(response.data.categories.map((category: Category) => ({ value: category.name, label: category.name })));
+    } catch (error) {
+      toast.error('Failed to fetch categories. Please try again.');
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -49,6 +67,13 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
     } catch (error) {
       toast.error('Failed to save expense. Please try again.');
     }
+  };
+
+  const handleCategoryChange = (newValue: any) => {
+    setFormData({
+      ...formData,
+      category: newValue ? newValue.value : '',
+    });
   };
 
   return (
@@ -84,7 +109,7 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
             />
           </div>
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
             <select
               id="category"
@@ -102,6 +127,17 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
               <option value="Bills">Bills</option>
               <option value="Others">Others</option>
             </select>
+          </div> */}
+          <div className="mb-4">
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+            <CreatableSelect
+              isClearable
+              options={categories}
+              value={categories.find((option) => option.value === formData.category)}
+              onChange={handleCategoryChange}
+              className="mt-2"
+              placeholder="Select or create category"
+            />
           </div>
 
           <div className="mb-4">
