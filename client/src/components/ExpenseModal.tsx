@@ -17,6 +17,7 @@ interface Category {
 
 const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
   const [formData, setFormData] = useState<Expense>({
+    _id: '',
     name: '',
     amount: 0,
     category: '',
@@ -130,9 +131,10 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
           <div className="mb-4">
             <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
             <CreatableSelect
+              
               isClearable
               options={categories}
-              value={categories.find((option) => option.value === formData.category)}
+              value={formData.category ? { value: formData.category, label: formData.category } : null}
               onChange={handleCategoryChange}
               className="mt-2"
               placeholder="Select or create category"
