@@ -35,6 +35,9 @@ axiosInstance.interceptors.response.use(
     } else {
       toast.error('An error occurred');
     }
+    if(error.status === 403) {
+      localStorage.clear()
+    }
     return Promise.reject(error);
   }
 );
