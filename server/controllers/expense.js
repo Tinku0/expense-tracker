@@ -85,4 +85,42 @@ const getExpenses = async (req, res, next) => {
     }
 };
 
-module.exports = { addExpense, editExpense, deleteExpense, getExpenses }
+const getExpensesByDate = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const { date } = req.params;
+
+        const expenses = await ExpenseModel.find({
+            userId,
+            date: {
+                $gte: new Date(date).setHours(0o0, 0o0, 0o0),
+                $lt: new Date(date).setHours(23, 59, 59)
+            }
+        });
+
+        res.status(200).json({ expenses });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getExpensesByDateRange = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const { startDate, endDate } = req.query;
+
+        const expenses = await ExpenseModel.find({
+            userId,
+            date: {
+                $gte: new Date(startDate).setHours(0o0, 0o0, 0o0),
+                $lt: new Date(endDate).setHours(23, 59, 59)
+            }
+        });
+
+        res.status(200).json({ expenses });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { addExpense, editExpense, deleteExpense, getExpenses, getExpensesByDate, getExpensesByDateRange };
