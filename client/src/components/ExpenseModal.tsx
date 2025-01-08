@@ -7,6 +7,7 @@ import CreatableSelect from 'react-select/creatable';
 interface ExpenseModalProps {
     expense: Expense | null;
     onClose: (status: string) => void;
+    categories: any[];
 }
 
 interface Category {
@@ -15,7 +16,7 @@ interface Category {
   userId: null | string
 }
 
-const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
+const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose, categories }) => {
   const [formData, setFormData] = useState<Expense>({
     _id: '',
     name: '',
@@ -24,10 +25,8 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
     description: '',
     date: '',
   });
-  const [categories, setCategories] = useState<{ value: string, label: string }[]>([]);
 
   useEffect(() => {
-    getCategories();
     if (expense) {
       setFormData({
         ...expense,
@@ -35,16 +34,6 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
       });
     }
   }, [expense]);
-
-  const getCategories = async () => {
-    try {
-      const response = await axiosInstance.get(import.meta.env.VITE_API_BASE_URL+'category/get');
-        console.log(response)
-      setCategories(response.data.categories.map((category: Category) => ({ value: category.name, label: category.name })));
-    } catch (error) {
-      toast.error('Failed to fetch categories. Please try again.');
-    }
-  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -78,7 +67,6 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
           name: newValue.value,
         });
         const newCategory = { value: response.data.name, label: response.data.name };
-        setCategories([...categories, newCategory]);
         setFormData({
           ...formData,
           category: newCategory.value,
