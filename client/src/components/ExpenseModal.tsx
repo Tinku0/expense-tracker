@@ -69,11 +69,29 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
     }
   };
 
-  const handleCategoryChange = (newValue: any) => {
-    setFormData({
-      ...formData,
-      category: newValue ? newValue.value : '',
-    });
+  const handleCategoryChange = async (newValue: any, actionMeta: any) => {
+    console.log(newValue, actionMeta);
+    if (actionMeta.action === 'create-option') {
+      try {
+        const response = await axiosInstance.post(import.meta.env.VITE_API_BASE_URL + 'category/add', {
+          name: newValue.value,
+        });
+        const newCategory = { value: response.data.name, label: response.data.name };
+        setCategories([...categories, newCategory]);
+        setFormData({
+          ...formData,
+          category: newCategory.value,
+        });
+        toast.success('Category added successfully!');
+      } catch (error) {
+        toast.error('Failed to add category. Please try again.');
+      }
+    } else {
+      setFormData({
+        ...formData,
+        category: newValue ? newValue.value : '',
+      });
+    }
   };
 
   return (
@@ -109,25 +127,6 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
             />
           </div>
 
-          {/* <div className="mb-4">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            >
-              <option value="">Select Category</option>
-              <option value="Food">Food</option>
-              <option value="Transport">Transport</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Shopping">Shopping</option>
-              <option value="Bills">Bills</option>
-              <option value="Others">Others</option>
-            </select>
-          </div> */}
           <div className="mb-4">
             <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
             <CreatableSelect
@@ -139,7 +138,6 @@ const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose }) => {
               placeholder="Select or create category"
             />
           </div>
-
           <div className="mb-4">
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
             <textarea
