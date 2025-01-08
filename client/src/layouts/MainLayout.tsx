@@ -24,7 +24,7 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
   return (
     <div>
       <Navbar user={user} onLogout={onLogout} />
-      <main className='m-10'>
+      <main className='m-5 md:m-10'>
         <Outlet />
       </main>
       <Footer />
