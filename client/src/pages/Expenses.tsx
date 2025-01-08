@@ -5,6 +5,8 @@ import ExpenseModal from '../components/ExpenseModal';
 import { Expense } from '../interfaces/Expense';
 import { MdOutlineDelete } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const categoryColors: { [key: string]: string } = {
   Food: 'bg-green-200 text-green-800',
@@ -16,17 +18,45 @@ const categoryColors: { [key: string]: string } = {
 
 const Expenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const categories = ['All', 'Food', 'Travel', 'Shopping', 'Bills', 'Other'];
 
   useEffect(() => {
     fetchExpenses();
   }, []);
 
-  const fetchExpenses = async () => {
+  useEffect(() => {
+    filterExpensesByCategory(selectedCategory);
+  }, [selectedCategory, expenses]);
+
+  const filterExpensesByCategory = (category: string) => {
+    if (category === '') {
+      setFilteredExpenses(expenses);
+    } else {
+      setFilteredExpenses(expenses.filter(expense => expense.category === category));
+    }
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  const fetchExpenses = async (start?: Date, end?: Date) => {
     try {
-      const response = await axiosInstance.get('expense/get');
+      let url = 'expense/get';
+      if (start && end) {
+        url = `expense/get/daterange?startDate=${start.toISOString()}&endDate=${end.toISOString()}`;
+      } else if (start) {
+        url = `expense/get/date/${start.toISOString()}`;
+      }
+      const response = await axiosInstance.get(url);
       setExpenses(response.data.expenses);
+      setFilteredExpenses(response.data.expenses);
     } catch (error) {
       toast.error('Failed to fetch expenses. Please try again.');
     }
@@ -44,6 +74,19 @@ const Expenses = () => {
       fetchExpenses();
     } catch (error) {
       toast.error('Failed to delete expense. Please try again.');
+    }
+  };
+
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+    if (start && end) {
+      fetchExpenses(start, end);
+    } else if (start) {
+      fetchExpenses(start);
+    } else {
+      fetchExpenses();
     }
   };
 
@@ -66,8 +109,31 @@ const Expenses = () => {
           Add Expense
         </button>
       </div>
+      <div className="flex justify-between items-center mb-4">
+        <DatePicker
+          selected={startDate}
+          onChange={handleDateChange}
+          startDate={startDate}
+          endDate={endDate}
+          selectsRange
+          isClearable
+          placeholderText="Select a date range"
+          className="px-4 py-2 border border-gray-300 rounded-md"
+        />
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="px-4 py-2 border border-gray-300 rounded-md"
+        >
+          {categories.map(category => (
+            <option key={category} value={category === 'All' ? '' : category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="bg-gray-50 shadow-sm rounded-lg overflow-x-auto">
-        {expenses.length != 0 ? <>
+        {filteredExpenses.length != 0 ? <>
           <table className="min-w-full bg-white hidden md:table">
           <thead className="bg-gray-800 text-white">
             <tr>
@@ -80,7 +146,7 @@ const Expenses = () => {
             </tr>
           </thead>
           <tbody>
-            {expenses && expenses.map((expense: Expense) => (
+            {filteredExpenses && filteredExpenses.map((expense: Expense) => (
               <tr key={expense._id} className="border-b hover:bg-gray-100">
                 <td className="py-2 px-4">{expense.name}</td>
                 <td className="py-2 px-4">{expense.amount}</td>

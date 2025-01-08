@@ -53,7 +53,7 @@ const Categories = () => {
                 }
             })
             .catch(error => {
-                toast.error('Failed to delete category. Please try again.');
+                toast.error('Failed to delete category. Please try again.'+error);
             })
     }
 
