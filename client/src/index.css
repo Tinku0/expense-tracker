@@ -32,3 +32,9 @@
   50% { opacity: 0.5; }
   100% { opacity: 1; }
 }
+
+.react-datepicker-wrapper{
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+}
