@@ -19,15 +19,16 @@ const categoryColors: { [key: string]: string } = {
 const Expenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const categories = ['All', 'Food', 'Travel', 'Shopping', 'Bills', 'Other'];
 
   useEffect(() => {
     fetchExpenses();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -59,6 +60,16 @@ const Expenses = () => {
       setFilteredExpenses(response.data.expenses);
     } catch (error) {
       toast.error('Failed to fetch expenses. Please try again.');
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axiosInstance.get('category/get');
+      const categoryNames = response.data.categories.map((category: { name: string }) => category.name);
+      setCategories(['All', ...categoryNames]);
+    } catch (error) {
+      toast.error('Failed to fetch categories. Please try again.');
     }
   };
 
@@ -98,6 +109,10 @@ const Expenses = () => {
     }
   };
 
+  const calculateTotal = () => {
+    return filteredExpenses.reduce((acc, expense) => acc + expense.amount, 0);
+  }
+
   return (
     <>
       <div className='flex justify-between items-center mb-4'>
@@ -106,10 +121,10 @@ const Expenses = () => {
           onClick={() => setIsModalOpen(true)}
           className="px-4 py-2 bg-blue-500 text-white rounded-md"
         >
-          Add Expense
+          Add
         </button>
       </div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col space-y-2 items-center mb-4 md:flex-row md:space-x-4 md:space-y-0">
         <DatePicker
           selected={startDate}
           onChange={handleDateChange}
@@ -118,12 +133,12 @@ const Expenses = () => {
           selectsRange
           isClearable
           placeholderText="Select a date range"
-          className="px-4 py-2 border border-gray-300 rounded-md"
+          className="px-4 py-2 border border-gray-300 rounded-md w-full"
         />
         <select
           value={selectedCategory}
           onChange={handleCategoryChange}
-          className="px-4 py-2 border border-gray-300 rounded-md"
+          className="px-4 py-2 w-full border border-gray-300 rounded-md md:w-auto"
         >
           {categories.map(category => (
             <option key={category} value={category === 'All' ? '' : category}>
@@ -137,12 +152,12 @@ const Expenses = () => {
           <table className="min-w-full bg-white hidden md:table">
           <thead className="bg-gray-800 text-white">
             <tr>
-              <th className="w-1/6 py-2 px-4 text-left">Name</th>
-              <th className="w-1/6 py-2 px-4 text-left">Amount</th>
-              <th className="w-1/6 py-2 px-4 text-left">Category</th>
-              <th className="w-2/6 py-2 px-4 text-left">Description</th>
-              <th className="w-1/6 py-2 px-4 text-left">Date</th>
-              <th className="w-1/6 py-2 px-4 text-center">Actions</th>
+              <th className="w-1/6 py-3 px-4 text-left">Name</th>
+              <th className="w-1/6 py-3 px-4 text-left">Amount</th>
+              <th className="w-1/6 py-3 px-4 text-left">Category</th>
+              <th className="w-2/6 py-3 px-4 text-left">Description</th>
+              <th className="w-1/6 py-3 px-4 text-left">Date</th>
+              <th className="w-1/6 py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -218,10 +233,15 @@ const Expenses = () => {
         </div>
         </> : <div className='p-3'>No Expenses</div> }
       </div>
+      <div className='flex items-center space-x-16 mt-2'>
+        <p className='text-xl font-bold'>Total Amount </p>
+        <p className='text-xl'>{calculateTotal()}</p>
+      </div>
       {isModalOpen && (
         <ExpenseModal
           expense={selectedExpense}
           onClose={handleModalClose}
+          categories={categories.map(category => ({ value: category, label: category }))}
         />
       )}
     </>
