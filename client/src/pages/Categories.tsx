@@ -14,7 +14,7 @@ interface Category {
 }
 
 const Categories = () => {
-
+    const [newCategory, setNewCategory] = useState<string>('');
     const [categories, setCategories] = useState<Category[]>([]);
     useEffect(() => {
         getCategories();
@@ -31,11 +31,11 @@ const Categories = () => {
 
     const handleAdd = async () => {
         const response = await axiosInstance.post(import.meta.env.VITE_API_BASE_URL + 'category/add', {
-            name: (document.getElementById('newCategory') as HTMLInputElement).value
+            name: newCategory
         });
         if(response) {
-            toast('Category added successfully!');
-            (document.getElementById('newCategory') as HTMLInputElement).value = '';
+            toast('Category added successfully!')
+            setNewCategory('')
             getCategories()
         }
     }
@@ -53,7 +53,7 @@ const Categories = () => {
                 }
             })
             .catch(error => {
-                toast.error('Failed to delete category. Please try again.'+error);
+                console.log(error)
             })
     }
 
@@ -79,8 +79,8 @@ const Categories = () => {
         <div className="flex flex-col space-y-2">
             <h1 className="text-2xl font-bold">Categories</h1>
             <div className="flex justify-between w-full space-x-2">
-                <input type="text" id='newCategory' placeholder="Enter new category" className="p-2 bg-gray-100 outline-none w-full rounded" />
-                <button className="w-28 bg-black text-white rounded" onClick={handleAdd}>Add</button>
+                <input type="text" value={newCategory} onChange={(e) => {setNewCategory(e.target.value)}} placeholder="Enter new category" className="p-2 bg-gray-100 outline-none w-full rounded" />
+                <button className="w-28 bg-black text-white rounded" disabled={!newCategory} onClick={handleAdd}>Add</button>
             </div>
             {categories.map((category, index) => (
                 <div key={category.name} className='rounded flex justify-between items-center p-4 my-2 bg-gray-100'>
