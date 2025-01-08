@@ -35,6 +35,12 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
               Expenses
             </Link>
             <Link
+              to="/categories"
+              className={location.pathname === '/categories' ? 'p-2 rounded text-gray-800 bg-white' : 'text-white hover:text-gray-700 hover:bg-white px-3 py-2 rounded-md text-md font-medium'}
+            >
+              Categories
+            </Link>
+            <Link
               to="/profile"
               className={location.pathname === '/profile' ? 'p-2 rounded text-gray-800 bg-white' : 'text-white hover:text-gray-700 hover:bg-white px-3 py-2 rounded-md text-md font-medium'}
             >
