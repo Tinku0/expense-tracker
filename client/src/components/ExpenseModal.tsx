@@ -10,12 +10,6 @@ interface ExpenseModalProps {
     categories: any[];
 }
 
-interface Category {
-  name: string,
-  type: string,
-  userId: null | string
-}
-
 const ExpenseModal: React.FC<ExpenseModalProps> = ({ expense, onClose, categories }) => {
   const [formData, setFormData] = useState<Expense>({
     _id: '',
