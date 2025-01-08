@@ -8,8 +8,7 @@ import { FiEdit2 } from 'react-icons/fi';
 
 const categoryColors: { [key: string]: string } = {
   Food: 'bg-green-200 text-green-800',
-  Transport: 'bg-blue-200 text-blue-800',
-  Entertainment: 'bg-purple-200 text-purple-800',
+  Travel: 'bg-blue-200 text-blue-800',
   Shopping: 'bg-pink-200 text-pink-800',
   Bills: 'bg-yellow-200 text-yellow-800',
   Other: 'bg-gray-200 text-gray-800',
