@@ -2,7 +2,7 @@ const Category = require('../models/category');
 
 // Fetch all categories (default + user-specific)
 const getCategories = async (req, res) => {
-    const userId = req.user ? req.user._id : null;
+    const userId = req.user ? req.user.id : null;
   
     try {
       const categories = await Category.find({
@@ -17,8 +17,7 @@ const getCategories = async (req, res) => {
 // Add a new category
 const addCategory = async (req, res) => {
   const { name, type } = req.body;
-  const userId = req.user ? req.user._id : null;
-
+  const userId = req.user ? req.user.id : null;
   try {
     const category = new Category({
       name,
